@@ -4,6 +4,7 @@ const fs = require('fs')
 const app = express();
 
 const mysql = require('mysql');
+const { createToken } = require('./src/token/JWT')
 
 // 创建数据库链接
 const connection = mysql.createConnection({
@@ -57,7 +58,9 @@ app.post('/api/user/login',(req,res)=>{
                         console.log('查询成功')
                         loginBody.message = '登录成功!'
                         loginBody.result = 'success'
-                        loginBody.data.token = 'login_success'
+                        // loginBody.data.token = 'login_success'
+                        loginBody.data.token = createToken({username,password})
+                        console.log('生成的token: ',loginBody.data.token)
                         loginBody.data.id = user.id
                         res.json(loginBody);
                     }
